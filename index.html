@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Timeless Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .page {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 253, 250, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(69, 90, 100, 0.2);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.6s ease-in-out;
+            position: absolute;
+            transform: scale(0.95) translateY(50px);
+            opacity: 0;
+            min-height: 80vh;
+            overflow-y: auto;
+            display: none;
+            border: 1px solid rgba(189, 189, 189, 0.3);
+        }
+        
+        .page.active {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        h1 {
+            color: #b71c1c;
+            margin-bottom: 15px;
+            font-size: 24px;
+            text-shadow: 0 1px 3px rgba(183, 28, 28, 0.1);
+        }
+        
+        p {
+            color: #455a64;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #d32f2f, #b71c1c);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.4s ease;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.5);
+        }
+        
+        /* Login Page */
+        .keypad-container {
+            margin: 15px auto;
+            width: 200px;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .key {
+            background: #fafafa;
+            border: 2px solid #eceff1;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(69, 90, 100, 0.1);
+        }
+        
+        .key:hover {
+            background: #eceff1;
+            transform: scale(1.05);
+        }
+        
+        .key:active {
+            background: #cfd8dc;
+            transform: scale(1);
+        }
+        
+        .key.special {
+            background: #f5f5f5;
+            font-size: 12px;
+            color: #b71c1c;
+        }
+        
+        .display {
+            background: #fafafa;
+            border: 2px solid #eceff1;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: 5px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #455a64;
+        }
+        
+        .profile-img {
+            width: 150px; /* Ukuran kecil khusus untuk onyed.jpg */
+            height: 150px;
+            border-radius: 50%; /* Kembali ke lingkaran untuk onyed.jpg */
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #fafafa;
+            box-shadow: 0 5px 15px rgba(69, 90, 100, 0.15);
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Timer Page */
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .timer-box {
+            background: #fff8e1;
+            padding: 10px;
+            border-radius: 12px;
+            min-width: 60px;
+            box-shadow: 0 5px 15px rgba(69, 90, 100, 0.1);
+            border: 1px solid #eceff1;
+        }
+        
+        .timer-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #b71c1c;
+            margin-bottom: 5px;
+        }
+        
+        .timer-label {
+            font-size: 10px;
+            color: #78909c;
+        }
+        
+        /* Gallery Page */
+        .gallery {
+            width: 100%;
+            max-width: 300px;
+            height: 500px;
+            position: relative;
+            margin: 15px 0;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(69, 90, 100, 0.2);
+            border: 1px solid #eceff1;
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            aspect-ratio: 1080 / 2400;
+        }
+        
+        .gallery-img.active {
+            opacity: 1;
+        }
+        
+        .caption {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            background: rgba(183, 28, 28, 0.8);
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+            opacity: 0;
+        }
+        
+        .gallery:hover .caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Secret Message Page */
+        .secret-message-container {
+            width: 100%;
+            height: 150px;
+            background: #fafafa;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #eceff1;
+        }
+        
+        .secret-message {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            color: #b71c1c;
+            font-weight: 500;
+        }
+        
+        .secret-message-container:hover .secret-message {
+            opacity: 1;
+        }
+        
+        /* Quiz Page */
+        .quiz-container {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .quiz-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eceff1;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-top: 10px;
+            outline: none;
+            transition: border-color 0.3s;
+            background: #fafafa;
+        }
+        
+        .quiz-input:focus {
+            border-color: #b71c1c;
+        }
+        
+        .quiz-result {
+            margin-top: 10px;
+            font-size: 14px;
+            min-height: 20px;
+            color: #455a64;
+        }
+        
+        /* Hearts Animation */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            animation: heartFall 4s linear forwards;
+            color: #d32f2f;
+            font-size: 16px;
+        }
+        
+        @keyframes heartFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Audio Player */
+        .audio-player {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .control-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.5);
+        }
+        
+        /* For Mobile Devices */
+        @media (max-width: 600px) {
+            .page {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .profile-img {
+                width: 120px; /* Ukuran lebih kecil lagi untuk HP */
+                height: 120px;
+            }
+            
+            .timer-container {
+                flex-wrap: wrap;
+            }
+            
+            .timer-box {
+                min-width: 50px;
+                padding: 8px;
+            }
+            
+            .timer-value {
+                font-size: 20px;
+            }
+            
+            .gallery {
+                max-width: 100%;
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Heart Animation Container -->
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Page 1: Login Page -->
+    <div class="page active" id="page1">
+        <img src="onyed.jpg" alt="Profile" class="profile-img">
+        <p>masukin kode rahasianya ler</p>
+        
+        <div class="keypad-container">
+            <div class="display" id="display"></div>
+            <div class="keypad">
+                <div class="key" data-key="1">1</div>
+                <div class="key" data-key="2">2</div>
+                <div class="key" data-key="3">3</div>
+                <div class="key" data-key="4">4</div>
+                <div class="key" data-key="5">5</div>
+                <div class="key" data-key="6">6</div>
+                <div class="key" data-key="7">7</div>
+                <div class="key" data-key="8">8</div>
+                <div class="key" data-key="9">9</div>
+                <div class="key special" data-key="clear">Clear</div>
+                <div class="key" data-key="0">0</div>
+                <div class="key special" data-key="enter">Enter</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Page 2: How Long We've Been Together -->
+    <div class="page" id="page2">
+        <h1>Perjalanan parel and ciuu</h1>
+        <button class="btn" id="checkTimeBtn">Udah berapa lama sii kita bareng?</button>
+    </div>
+    
+    <!-- Page 3: Time Counter -->
+    <div class="page" id="page3">
+        <h1>21-09-2024</h1>
+        
+        <div class="timer-container">
+            <div class="timer-box">
+                <div class="timer-value" id="days">00</div>
+                <div class="timer-label">Days</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-value" id="hours">00</div>
+                <div class="timer-label">Hours</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-value" id="minutes">00</div>
+                <div class="timer-label">Minutes</div>
+            </div>
+            <div class="timer-box">
+                <div class="timer-value" id="seconds">00</div>
+                <div class="timer-label">Seconds</div>
+            </div>
+        </div>
+        
+        <p>bejirrr ternyataa dah lama juga dihh, gaberasa huhu</p>
+        <button class="btn" id="showMemoriesBtn">Nextt</button>
+    </div>
+    
+    <!-- Page 4: Memories Gallery -->
+    <div class="page" id="page4">
+        <h1>Moment" kitaa</h1>
+        
+        <div class="gallery" id="gallery">
+            <img src="1.jpg" alt="1/5" class="gallery-img active" data-caption="chattan awal kitaa">
+            <img src="2.jpg" alt="2/5" class="gallery-img" data-caption="pap pertama dari bowlerr">
+            <img src="3.jpg" alt="3/5" class="gallery-img" data-caption="pap pertama dari parell">
+            <img src="4.jpg" alt="4/5" class="gallery-img" data-caption="yalele nya si parell">
+            <img src="5.jpg" alt="5/5" class="gallery-img" data-caption="esge pertamaa tentang parel🙀">
+            <div class="caption" id="caption">chattan awal kitaa</div>
+        </div>
+        
+        <button class="btn" id="nextImageBtn">→</button>
+        <button class="btn" id="showSecretBtn" style="margin-top: 10px;">Next</button>
+    </div>
+    
+    <!-- Page 5: Secret Message -->
+    <div class="page" id="page5">
+        <h1>Pesan rahasia</h1>
+        <p>pencet kotaknyaa ler</p>
+        
+        <div class="secret-message-container" id="secretMessageContainer">
+            <div class="secret-message" id="secretMessage"></div>
+        </div>
+        
+        <button class="btn" id="showQuizBtn">Next</button>
+    </div>
+    
+    <!-- Page 6: Quiz -->
+    <div class="page" id="page6">
+        <h1>Tes ingatan</h1>
+        <p>kita jadian di hari apa?</p>
+        
+        <div class="quiz-container">
+            <input type="text" class="quiz-input" id="quizInput" placeholder="Your answer...">
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+        
+        <button class="btn" id="checkAnswerBtn">cek</button>
+        <button class="btn" id="showSurpriseBtn" style="display: none; margin-top: 10px;">cek kejutan</button>
+    </div>
+    
+    <!-- Page 7: Surprise Video/Audio -->
+    <div class="page" id="page7">
+        <h1>Menggambarkan kamu bgttt</h1>
+        <p>dengerin yee</p>
+        
+        <div class="audio-player">
+            <audio id="backgroundMusic" src="sempurna.mp3"></audio>
+            <button class="control-btn" id="playBtn">▶</button>
+            <p>Playing: "Bowler"</p>
+        </div>
+        
+        <button class="btn" id="replayBtn">restart</button>
+    </div>
+
+    <script>
+        // Current Page Tracking
+        let currentPage = 1;
+        
+        // Page Navigation Functions
+        function showPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(`page${pageNumber}`).classList.add('active');
+            currentPage = pageNumber;
+            
+            if (pageNumber === 3 || pageNumber === 7) {
+                startHeartAnimation(pageNumber);
+                if (pageNumber === 3) {
+                    updateCounter();
+                    counterInterval = setInterval(updateCounter, 1000);
+                }
+            } else {
+                stopHeartAnimation();
+                if (counterInterval) clearInterval(counterInterval);
+            }
+            
+            if (pageNumber === 5) {
+                startTypingEffect();
+            }
+        }
+        
+        // Page 1: Login Keypad Logic
+        let displayValue = '';
+        const correctCode = '21';
+        
+        document.querySelectorAll('.key').forEach(key => {
+            key.addEventListener('click', function() {
+                const keyValue = this.getAttribute('data-key');
+                
+                if (keyValue === 'clear') {
+                    displayValue = '';
+                } else if (keyValue === 'enter') {
+                    if (displayValue === correctCode) {
+                        showPage(2);
+                    } else {
+                        document.getElementById('display').style.color = '#d32f2f';
+                        setTimeout(() => {
+                            document.getElementById('display').style.color = '#455a64';
+                            displayValue = '';
+                            updateDisplay();
+                        }, 1000);
+                    }
+                } else {
+                    if (displayValue.length < 4) {
+                        displayValue += keyValue;
+                    }
+                }
+                
+                updateDisplay();
+            });
+        });
+        
+        function updateDisplay() {
+            document.getElementById('display').innerText = displayValue.replace(/./g, '*');
+        }
+        
+        // Page 2: Check Time Button
+        document.getElementById('checkTimeBtn').addEventListener('click', function() {
+            showPage(3);
+        });
+        
+        // Page 3: Time Counter Logic
+        let counterInterval;
+        const startDate = new Date('September 21, 2024 00:00:00').getTime();
+        
+        function updateCounter() {
+            const now = new Date().getTime();
+            const diff = now - startDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }
+        
+        document.getElementById('showMemoriesBtn').addEventListener('click', function() {
+            showPage(4);
+        });
+        
+        // Page 4: Gallery Logic
+        let currentImage = 0;
+        const images = document.querySelectorAll('.gallery-img');
+        
+        document.getElementById('nextImageBtn').addEventListener('click', function() {
+            images[currentImage].classList.remove('active');
+            currentImage = (currentImage + 1) % images.length;
+            images[currentImage].classList.add('active');
+            document.getElementById('caption').innerText = images[currentImage].getAttribute('data-caption');
+        });
+        
+        document.getElementById('showSecretBtn').addEventListener('click', function() {
+            showPage(5);
+        });
+        
+        // Page 5: Secret Message Logic
+        function startTypingEffect() {
+            const message = "ss4tuk41im4tbyyy, k4mutuhs3mpu12n4dim4t44kuu.";
+            const messageElement = document.getElementById('secretMessage');
+            messageElement.innerText = '';
+            
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < message.length) {
+                    messageElement.innerText += message.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 50);
+        }
+        
+        document.getElementById('showQuizBtn').addEventListener('click', function() {
+            showPage(6);
+        });
+        
+        // Page 6: Quiz Logic
+        const correctAnswer = 'sabtu';
+        
+        document.getElementById('checkAnswerBtn').addEventListener('click', function() {
+            const userAnswer = document.getElementById('quizInput').value.trim().toLowerCase();
+            const resultElement = document.getElementById('quizResult');
+            
+            if (userAnswer === correctAnswer || userAnswer.includes('sabtu') || userAnswer.includes('Sabtu')) {
+                resultElement.innerText = '✓ anjayy bener';
+                resultElement.style.color = '#b71c1c';
+                document.getElementById('showSurpriseBtn').style.display = 'inline-block';
+                startHeartAnimation(6); // Tetap aktifkan animasi hati di sini
+            } else if (userAnswer === '') {
+                resultElement.innerText = 'isi woyy';
+                resultElement.style.color = '#d32f2f';
+            } else {
+                resultElement.innerText = 'coba lagii ler';
+                resultElement.style.color = '#d32f2f';
+            }
+        });
+        
+        document.getElementById('showSurpriseBtn').addEventListener('click', function() {
+            showPage(7);
+        });
+        
+        // Page 7: Surprise Logic
+        let audio = document.getElementById('backgroundMusic');
+        let isPlaying = false;
+        
+        document.getElementById('playBtn').addEventListener('click', function() {
+            if (!isPlaying) {
+                audio.play();
+                this.innerText = '⏸';
+                isPlaying = true;
+            } else {
+                audio.pause();
+                this.innerText = '▶';
+                isPlaying = false;  
+            }
+        });
+        
+        document.getElementById('replayBtn').addEventListener('click', function() {
+            showPage(1);
+            displayValue = '';
+            updateDisplay();
+        });
+        
+        // Heart Animation
+        let heartInterval;
+        function startHeartAnimation(pageNumber) {
+            document.getElementById('heartsContainer').style.display = 'block';
+            createHearts(pageNumber);
+            // Intensitas berbeda untuk Page 3 dan 7
+            const intervalTime = (pageNumber === 3 || pageNumber === 7) ? 3000 : 6000;
+            heartInterval = setInterval(() => createHearts(pageNumber), intervalTime);
+        }
+        
+        function stopHeartAnimation() {
+            document.getElementById('heartsContainer').style.display = 'none';
+            document.getElementById('heartsContainer').innerHTML = '';
+            if (heartInterval) clearInterval(heartInterval);
+        }
+        
+        function createHearts(pageNumber) {
+            const container = document.getElementById('heartsContainer');
+            const heartSymbol = '♥';
+            // Tingkatkan intensitas untuk Page 3 dan 7
+            const heartCount = (pageNumber === 3 || pageNumber === 7) ? 20 : 10;
+            const delayFactor = (pageNumber === 3 || pageNumber === 7) ? 150 : 300;
+            
+            for (let i = 0; i < heartCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    const posX = Math.random() * window.innerWidth;
+                    
+                    heart.style.left = `${posX}px`;
+                    heart.style.top = '-30px';
+                    heart.style.animationDuration = `${3 + Math.random() * 3}s`;
+                    heart.style.animationDelay = `${Math.random() * 2}s`;
+                    heart.innerHTML = heartSymbol;
+                    
+                    container.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        if (container.contains(heart)) {
+                            container.removeChild(heart);
+                        }
+                    }, 6000);
+                }, i * delayFactor);
+            }
+        }
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
